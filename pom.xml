@@ -17,4 +17,18 @@
         <version>2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sixi.core</groupId>
+            <artifactId>core-market-service-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sixi.gateway</groupId>
+            <artifactId>gateway-checksign-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
