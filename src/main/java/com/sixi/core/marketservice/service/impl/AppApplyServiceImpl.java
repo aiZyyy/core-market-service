@@ -7,9 +7,8 @@ import com.sixi.core.marketservice.domain.form.AppApplyForm;
 import com.sixi.core.marketservice.domain.vo.AppApplyVo;
 import com.sixi.core.marketservice.mapper.AppInfoMapper;
 import com.sixi.core.marketservice.service.AppApplyService;
-import com.sixi.core.marketservice.utils.RSAUtils;
+import com.sixi.gateway.checksignservice.oauth.utils.RSAUtils;
 import com.sixi.micro.common.utils.Assert;
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * @Author: ZY
