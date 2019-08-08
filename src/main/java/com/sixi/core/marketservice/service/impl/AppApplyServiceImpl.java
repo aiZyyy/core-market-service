@@ -3,11 +3,15 @@ package com.sixi.core.marketservice.service.impl;
 import com.sixi.common.snowflakeservice.api.SnowFlakeServiceApi;
 import com.sixi.common.snowflakeservice.domain.form.SnowFlakeForm;
 import com.sixi.core.marketservice.domain.entity.AppInfo;
+import com.sixi.core.marketservice.domain.entity.AppInfoExample;
 import com.sixi.core.marketservice.domain.form.AppApplyForm;
+import com.sixi.core.marketservice.domain.form.AppIdForm;
 import com.sixi.core.marketservice.domain.vo.AppApplyVo;
+import com.sixi.core.marketservice.domain.vo.AppPublicKeyVo;
 import com.sixi.core.marketservice.mapper.AppInfoMapper;
 import com.sixi.core.marketservice.service.AppApplyService;
-import com.sixi.gateway.checksignservice.oauth.utils.RSAUtils;
+import com.sixi.gateway.checksigncommon.oauth.utils.RSAUtils;
+import com.sixi.micro.common.kits.MapperKit;
 import com.sixi.micro.common.utils.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +64,15 @@ public class AppApplyServiceImpl implements AppApplyService {
         AppApplyVo appApplyVo = AppApplyVo.builder().appId(appId).appPrivateKey(rsaKeyPair.getPrivateKey())
                 .appPublicKey(rsaKeyPair.getPublicKey()).build();
         return appApplyVo;
+    }
+
+    @Override
+    public AppPublicKeyVo selectPublicKey(AppIdForm appPublicKeyForm) {
+
+        AppInfoExample appInfoExample = new AppInfoExample();
+        appInfoExample.createCriteria().andAppIdEqualTo(appPublicKeyForm.getAppId()).andAppEndTimeIsNull();
+        AppInfo appInfo = MapperKit.getFirstOrNull(appInfoMapper.selectByExample(appInfoExample));
+
+        return AppPublicKeyVo.builder().appPublicKey(appInfo.getAppPublicKey()).build();
     }
 }

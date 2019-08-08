@@ -2,7 +2,9 @@ package com.sixi.core.marketservice.controller;
 
 import com.sixi.core.marketservice.api.AppApplyServiceApi;
 import com.sixi.core.marketservice.domain.form.AppApplyForm;
+import com.sixi.core.marketservice.domain.form.AppIdForm;
 import com.sixi.core.marketservice.domain.vo.AppApplyVo;
+import com.sixi.core.marketservice.domain.vo.AppPublicKeyVo;
 import com.sixi.core.marketservice.service.AppApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,5 +30,11 @@ public class AppApplyController implements AppApplyServiceApi {
     public AppApplyVo apply(@RequestBody @Valid AppApplyForm applyForm) {
 
         return appApplyService.apply(applyForm);
+    }
+
+    @Override
+    @PostMapping("/app/selectpublickey")
+    public AppPublicKeyVo selectPublicKey(@RequestBody @Valid AppIdForm appPublicKeyForm) {
+        return appApplyService.selectPublicKey(appPublicKeyForm);
     }
 }
