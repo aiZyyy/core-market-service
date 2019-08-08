@@ -30,5 +30,10 @@
             <artifactId>gateway-checksign-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.sixi.common</groupId>
+            <artifactId>common-snowflake-service-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
