@@ -34,7 +34,7 @@ import java.util.Date;
 public class AppApplyServiceImpl implements AppApplyService {
     final String key = "MARKET:";
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private AppInfoMapper appInfoMapper;
 
@@ -64,7 +64,7 @@ public class AppApplyServiceImpl implements AppApplyService {
 
         //app基本信息入库
         appInfoMapper.insertSelective(appInfo);
-        redisTemplate.opsForSet().add(key + appInfo.getAppId(), appInfo.getAppPublicKey());
+        redisTemplate.opsForValue().set(key + appInfo.getAppId(), appInfo.getAppPublicKey());
         AppApplyVo appApplyVo = AppApplyVo.builder().appId(appId).appPrivateKey(rsaKeyPair.getPrivateKey())
                 .appPublicKey(rsaKeyPair.getPublicKey()).build();
         return appApplyVo;
