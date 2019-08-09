@@ -7,10 +7,11 @@ import com.sixi.core.marketservice.domain.form.AppApplyForm;
 import com.sixi.core.marketservice.domain.vo.AppApplyVo;
 import com.sixi.core.marketservice.mapper.AppInfoMapper;
 import com.sixi.core.marketservice.service.AppApplyService;
-import com.sixi.gateway.checksignservice.oauth.utils.RSAUtils;
+import com.sixi.gateway.checksigncommon.oauth.utils.RSAUtils;
 import com.sixi.micro.common.utils.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,7 +28,9 @@ import java.util.Date;
 @Service
 @Slf4j
 public class AppApplyServiceImpl implements AppApplyService {
-
+    final String key = "MARKET:";
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Autowired
     private AppInfoMapper appInfoMapper;
 
@@ -36,11 +39,9 @@ public class AppApplyServiceImpl implements AppApplyService {
 
     @Override
     public AppApplyVo apply(AppApplyForm appApplyForm) {
-
         Assert.requireNonNull(appApplyForm, "appApplyForm对象为空");
         //雪花算法生成唯一appId
         String appId = snowFlakeServiceApi.getIdEntifier(SnowFlakeForm.builder().prefix("app").build());
-
         RSAUtils.RSAKeyPair rsaKeyPair = null;
         try {
             //生成唯一的公钥,私钥
@@ -57,6 +58,7 @@ public class AppApplyServiceImpl implements AppApplyService {
 
         //app基本信息入库
         appInfoMapper.insertSelective(appInfo);
+        redisTemplate.opsForSet().add(key + appInfo.getAppId(), appInfo.getAppPublicKey());
         AppApplyVo appApplyVo = AppApplyVo.builder().appId(appId).appPrivateKey(rsaKeyPair.getPrivateKey())
                 .appPublicKey(rsaKeyPair.getPublicKey()).build();
         return appApplyVo;

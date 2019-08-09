@@ -10,6 +10,5 @@ import com.sixi.core.marketservice.domain.vo.AppApplyVo;
  * @Description:
  */
 public interface AppApplyService {
-
     AppApplyVo apply(AppApplyForm applyForm);
 }

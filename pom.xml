@@ -24,16 +24,16 @@
             <artifactId>core-market-service-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.sixi.gateway</groupId>
-            <artifactId>gateway-checksign-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>com.sixi.common</groupId>
             <artifactId>common-snowflake-service-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sixi.gateway</groupId>
+            <artifactId>gateway-checksign-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
