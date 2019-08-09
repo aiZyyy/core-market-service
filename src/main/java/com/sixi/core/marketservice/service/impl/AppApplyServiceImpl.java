@@ -3,11 +3,15 @@ package com.sixi.core.marketservice.service.impl;
 import com.sixi.common.snowflakeservice.api.SnowFlakeServiceApi;
 import com.sixi.common.snowflakeservice.domain.form.SnowFlakeForm;
 import com.sixi.core.marketservice.domain.entity.AppInfo;
+import com.sixi.core.marketservice.domain.entity.AppInfoExample;
 import com.sixi.core.marketservice.domain.form.AppApplyForm;
+import com.sixi.core.marketservice.domain.form.AppIdForm;
 import com.sixi.core.marketservice.domain.vo.AppApplyVo;
+import com.sixi.core.marketservice.domain.vo.AppPublicKeyVo;
 import com.sixi.core.marketservice.mapper.AppInfoMapper;
 import com.sixi.core.marketservice.service.AppApplyService;
 import com.sixi.gateway.checksigncommon.oauth.utils.RSAUtils;
+import com.sixi.micro.common.kits.MapperKit;
 import com.sixi.micro.common.utils.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +29,8 @@ import java.util.Date;
  * @Description:
  */
 
-@Service
 @Slf4j
+@Service
 public class AppApplyServiceImpl implements AppApplyService {
     final String key = "MARKET:";
     @Autowired
@@ -39,9 +43,11 @@ public class AppApplyServiceImpl implements AppApplyService {
 
     @Override
     public AppApplyVo apply(AppApplyForm appApplyForm) {
+
         Assert.requireNonNull(appApplyForm, "appApplyForm对象为空");
         //雪花算法生成唯一appId
         String appId = snowFlakeServiceApi.getIdEntifier(SnowFlakeForm.builder().prefix("app").build());
+
         RSAUtils.RSAKeyPair rsaKeyPair = null;
         try {
             //生成唯一的公钥,私钥
@@ -62,5 +68,15 @@ public class AppApplyServiceImpl implements AppApplyService {
         AppApplyVo appApplyVo = AppApplyVo.builder().appId(appId).appPrivateKey(rsaKeyPair.getPrivateKey())
                 .appPublicKey(rsaKeyPair.getPublicKey()).build();
         return appApplyVo;
+    }
+
+    @Override
+    public AppPublicKeyVo selectPublicKey(AppIdForm appPublicKeyForm) {
+
+        AppInfoExample appInfoExample = new AppInfoExample();
+        appInfoExample.createCriteria().andAppIdEqualTo(appPublicKeyForm.getAppId()).andAppEndTimeIsNull();
+        AppInfo appInfo = MapperKit.getFirstOrNull(appInfoMapper.selectByExample(appInfoExample));
+
+        return AppPublicKeyVo.builder().appPublicKey(appInfo.getAppPublicKey()).build();
     }
 }
