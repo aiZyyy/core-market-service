@@ -28,7 +28,6 @@ public class AppApplyController implements AppApplyServiceApi {
     @Override
     @PostMapping("/app/apply")
     public AppApplyVo apply(@RequestBody @Valid AppApplyForm applyForm) {
-
         return appApplyService.apply(applyForm);
     }
 
